@@ -161,6 +161,18 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_text_message(event):
+
+    if not is_member(event):
+        # copy
+        liff_url = "line://app/1570842118-JZMKOLgP"  # ใช้ของตัวเอง
+        line_bot_api.reply_message(event.reply_token, [
+            TextSendMessage('ลงทะเบียนที่ลิงค์นี้'),
+            TextSendMessage(text=liff_url)
+        ])
+        return True
+
+
+
     text = event.message.text
 
     if text == 'test':
