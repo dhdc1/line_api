@@ -95,14 +95,21 @@ def con_db():
 #web request
 @app.route("/regis", methods=['POST', 'GET'])
 def regis():
-    if request.method == 'POST':
-        cid = request.form['cid']
-        line_id = request.form['line_id']
-        print(cid, line_id)
-        return 'OK'
+    if request.method == 'GET':
+        return render_template('regis.html')
 
-    elif request.method == 'GET':
-        return render_template("regis.html")
+    if request.method == 'POST':
+        return render_template('ok.html')
+
+
+
+
+
+@app.route("/ok", methods=['GET'])
+def ok():
+    return render_template('ok.html')
+
+
 
 
 
@@ -133,6 +140,7 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_text_message(event):
     text = event.message.text
+
     if text == 'test':
         line_bot_api.reply_message(
             event.reply_token, [
@@ -143,6 +151,11 @@ def handle_text_message(event):
                 LocationSendMessage(address='ที่ไหนซักแห่ง', latitude='16.737367', longitude='100.273091', title='ส่งพิกัดให้นะ')
             ]
         )
+
+    if text == 'ฉันลงทะเบียนเรียบร้อยแล้ว':
+        line_bot_api.reply_message(event.reply_token,[
+            TextSendMessage(text='อ๋อ เหรอจ๊ะ ยินดีด้วยนะ')
+        ])
 
 
 
