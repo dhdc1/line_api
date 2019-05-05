@@ -1,0 +1,25 @@
+﻿1)ลง python3  และ  เครื่องมือเขียน code ได้แก่ Pycharm และ VsCode
+2)สร้าง webhook ด้วย Flask Service  และทำ https ด้วย ngrok
+3) เปิดเปิด greeting message , auto response
+4)ตรวจจับ follow และ unfollow  และดู  user_id
+5)ตรวจจับ text_message
+6)ทำ Rich Menu
+7)ตอบกลับ 
+ TextSendMessage , LocationSendMessage , FlexSendMessage
+ StickerSendMessage ,TemplateSendMessage ,ImageSendMessage
+8)ทดลองสร้างหน้าจอ LIFF เพื่อให้ user ลงทะเบียน และตอบโต้เมื่อลงทะเบียนสำเร็จ/ไม่สำเร็จ
+9)ทำ LIFF : Line Frontend Framework 
+10)ตรวจจับ  และ ตอบกลับ
+ - text_message
+ - stricker_message
+ - location_message
+ - content_message (image / video)
+ - postback
+ - beacon (ไม่สอน)
+11)ส่ง push message แบบระบุคน /หลายคน  (โควต้า 500 ข้อความต่อเดือน)
+
+
+
+
+
+ 

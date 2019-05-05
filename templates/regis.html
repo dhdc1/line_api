@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Regis</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+
+<body>
+
+  <form action='/regis' method="POST">
+    <p><input type="text" name="cid" id="cid" placeholder="เลขบัตรประชาชน" /></p>
+    <p><input type="number" name="byear" id="byear" placeholder="ปี พ.ศ.เกิด" /></p>
+    <p><input type="text" name="line_id" id="line_id"></p>
+    <p>
+      <button type="submit">Yes</button>
+      <button type="button" class="cancel">No</button>
+    </p>
+
+  </form>
+
+
+
+
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="https://d.line-scdn.net/liff/1.0/sdk.js"></script>
+
+  <script>
+    liff.init(
+      function (data) {
+        const userId = data.context.userId;
+        $('#line_id').val(userId);
+        liff.getProfile()
+          .then(profile => {
+            const name = profile.displayName
+            document.title = "สวัสดีคุณ " + name;
+          })
+          .catch((err) => {
+            alert(err)
+          });
+      },
+      function (err) {
+        alert(err);
+      }
+    );
+
+    $('.cancel').click(function (e) {
+      liff.closeWindow();
+    });
+  </script>
+
+
+
+</body>
+
+</html>

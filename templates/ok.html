@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>OK</title>
+</head>
+
+<body>
+    <button id='ok'>ลงทะเบียนสำเร็จ!!</button>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://d.line-scdn.net/liff/1.0/sdk.js"></script>
+    <script>
+        liff.init(function(data){
+            
+        },function(err){
+            alert(err)
+        });
+
+        $('#ok').click(function(){
+            liff.sendMessages([
+                {
+                    type:'text',
+                    text:'ฉันลงทะเบียนเรียบร้อยแล้ว'
+                }
+            ]);
+            liff.closeWindow();
+        })
+    </script>
+</body>
+
+</html>
