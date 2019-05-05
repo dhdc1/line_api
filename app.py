@@ -99,6 +99,11 @@ def regis():
         return render_template('regis.html')
 
     if request.method == 'POST':
+        cid = request.form['cid']
+        byear = request.form['byear']
+        line_id = request.form['line_id']
+        print(cid, byear, line_id)
+
         return render_template('ok.html')
 
 
