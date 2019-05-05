@@ -96,7 +96,7 @@ def con_db():
     return db
 
 
-def line_bot_reply(event, messages):
+def line_message_reply(event, messages):
     payload = {
         'replyToken': event.reply_token,
         "messages": messages
@@ -107,6 +107,20 @@ def line_bot_reply(event, messages):
     }
     r = requests.post(api_reply, data=json.dumps(payload), headers=headers)
     print(r)
+
+
+def is_member(event):
+    line_id = event.source.user_id
+    sql = "select count(cid) from line where line_id ='{0}'".format(line_id)
+    db = con_db()
+    cursor = db.cursor()
+    cursor.execute(sql)
+    row = cursor.fetchone()
+
+    if row[0] > 0:
+        return True
+    else:
+        return False
 
 
 # web request
@@ -148,6 +162,14 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_text_message(event):
+    if not is_member(event):
+        line_message_reply(event, [
+            {
+                'type': 'text',
+                'text': '{0} is not member.'.format(get_profile(event))
+            }
+        ])
+
     text = event.message.text
     if text == 'test':
         line_bot_api.reply_message(
@@ -172,7 +194,7 @@ def handle_text_message(event):
         ])
 
     if text == 'p':
-        line_bot_reply(event, [
+        line_message_reply(event, [
             {
                 "type": "text",
                 "text": "Wow Wow"
