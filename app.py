@@ -14,13 +14,14 @@
 
 from __future__ import unicode_literals
 
-
 import errno
 import os
 import sys
 import tempfile
 import mysql.connector
 import random
+import requests
+import json
 
 from flask import Flask, request, abort, send_from_directory, render_template
 from werkzeug.middleware.proxy_fix import ProxyFix
@@ -50,9 +51,13 @@ from linebot.models import (
 app = Flask(__name__)
 app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_host=1, x_proto=1)
 
+api_reply = "https://api.line.me/v2/bot/message/reply"
+api_push = "https://api.line.me/v2/bot/message/multicast"
+
 # เปลี่ยนเป็นของ chanel ตัวเอง
 channel_secret = "d2d9f8b67a4837db81ced2cb47651a4f"
 channel_access_token = "ya/3TTMl4IK706X8nqW3A+6qXzRwWwet0LJdplhFtncpNC04cuUL3t25wGPdM9qsggUyQ0Y+H0xu+IpvVCDs2cMm15/A0rPTkiYDwH0vxXpoVnxbImierkix9zeybtxdSgbS4jZEpBCs2ZVLTCPhhwdB04t89/1O/w1cDnyilFU="
+
 if channel_secret is None:
     print('Specify LINE_CHANNEL_SECRET as environment variable.')
     sys.exit(1)
@@ -92,6 +97,7 @@ def con_db():
     )
     return db
 
+
 def is_member(event):
     line_id = event.source.user_id
     sql = "select count(cid) from line where line_id = '{0}' ".format(line_id)
@@ -105,7 +111,34 @@ def is_member(event):
         return False
 
 
-#web request
+def line_message_reply(event, messages):
+    payload = {
+        'replyToken': event.reply_token,
+        "messages": messages
+    }
+    headers = {
+        'Authorization': 'Bearer {0}'.format(channel_access_token),
+        'Content-Type': 'application/json'
+    }
+    r = requests.post(api_reply, data=json.dumps(payload), headers=headers)
+    print(r)
+
+
+def line_message_push(to, messages):
+    payload = {
+        'to': to,
+        'messages': messages
+    }
+
+    headers = {
+        'Authorization': 'Bearer {0}'.format(channel_access_token),
+        'Content-Type': 'application/json'
+    }
+    r = requests.post(api_push, data=json.dumps(payload), headers=headers)
+    print(r)
+
+
+# web request
 @app.route("/regis", methods=['POST', 'GET'])
 def regis():
     if request.method == 'GET':
@@ -132,10 +165,19 @@ def ok():
     return render_template('ok.html')
 
 
+@app.route('/push', methods=['GET'])
+def push():
+
+    line_message_push(['Ude27617017e3cbf820dd9aa13b1491ca'], [
+        {
+            'type': ' text',
+            'text': 'ข้อความเสียสตางค์'
+        }
+    ])
+    return 'OK'
 
 
-
-#webhook
+# webhook
 @app.route("/callback", methods=['POST'])
 def callback():
     # get X-Line-Signature header value
@@ -161,9 +203,8 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_text_message(event):
-
+    print(event.source.user_id)
     if not is_member(event):
-        # copy
         liff_url = "line://app/1570842118-JZMKOLgP"  # ใช้ของตัวเอง
         line_bot_api.reply_message(event.reply_token, [
             TextSendMessage('ลงทะเบียนที่ลิงค์นี้'),
@@ -171,29 +212,93 @@ def handle_text_message(event):
         ])
         return True
 
-
-
     text = event.message.text
 
     if text == 'test':
         line_bot_api.reply_message(
             event.reply_token, [
                 TextSendMessage(text=event.message.text),
-                TextSendMessage(text="line_id="+event.source.user_id),
+                TextSendMessage(text="line_id=" + event.source.user_id),
                 TextSendMessage(text=get_profile(event)),
                 StickerSendMessage(package_id=1, sticker_id=110),
-                LocationSendMessage(address='ที่ไหนซักแห่ง', latitude='16.737367', longitude='100.273091', title='ส่งพิกัดให้นะ')
+                LocationSendMessage(address='ที่ไหนซักแห่ง', latitude='16.737367', longitude='100.273091',
+                                    title='ส่งพิกัดให้นะ')
             ]
         )
 
     if text == 'ฉันลงทะเบียนเรียบร้อยแล้ว':
-        line_bot_api.reply_message(event.reply_token,[
+        line_bot_api.reply_message(event.reply_token, [
             TextSendMessage(text='อ๋อ เหรอจ๊ะ ยินดีด้วยนะ')
         ])
 
+    if text == 'ไป':
+        line_message_reply(event, [
+            {
+                "type": "template",
+                "altText": "this is a confirm template",
+                "template": {
+                    "type": "confirm",
+                    "actions": [
+                        {
+                            "type": "message",
+                            "label": "ใช่",
+                            "text": "ใช่"
+                        },
+                        {
+                            "type": "message",
+                            "label": "ไม่",
+                            "text": "ไม่"
+                        }
+                    ],
+                    "text": "ยืนยันใช่มั้ยคะ1"
+                }
+            },
+            {
+                "type": "template",
+                "altText": "this is a confirm template",
+                "template": {
+                    "type": "confirm",
+                    "actions": [
+                        {
+                            "type": "message",
+                            "label": "ใช่",
+                            "text": "ใช่"
+                        },
+                        {
+                            "type": "message",
+                            "label": "ไม่",
+                            "text": "ไม่"
+                        }
+                    ],
+                    "text": "ยืนยันใช่มั้ยคะ2"
+                }
+            }
+        ])
 
-
-
+    if text == 'aa':
+        line_message_reply(event, [
+            {
+                "type": "template",
+                "altText": "this is a buttons template",
+                "template": {
+                    "type": "buttons",
+                    "actions": [
+                        {
+                            "type": "message",
+                            "label": "Action 1",
+                            "text": "Action 1"
+                        },
+                        {
+                            "type": "message",
+                            "label": "Action 2",
+                            "text": "Action 2"
+                        }
+                    ],
+                    "title": "Title",
+                    "text": "Text"
+                }
+            }
+        ])
 
 
 @handler.add(MessageEvent, message=LocationMessage)
@@ -245,7 +350,7 @@ def handle_content_message(event):
     dist_name = os.path.basename(dist_path)
     os.rename(tempfile_path, dist_path)
 
-    url = request.url_root + 'static/tmp/'+dist_name
+    url = request.url_root + 'static/tmp/' + dist_name
 
     line_bot_api.reply_message(
         event.reply_token, [
@@ -255,9 +360,9 @@ def handle_content_message(event):
         ])
 
 
-@handler.add(FollowEvent)   #add ใหม่  / unblock
+@handler.add(FollowEvent)  # add ใหม่  / unblock
 def handle_follow(event):
-    #copy
+    # copy
     liff_url = "line://app/1570842118-JZMKOLgP"  # ใช้ของตัวเอง
     buttons_template = ButtonsTemplate(
         title='ลงทะเบียน', text='หากท่านไม่ลงทะเบียนจะไม่สามารถใช้บริการได้', actions=[
@@ -266,10 +371,10 @@ def handle_follow(event):
     template_message = TemplateSendMessage(
         alt_text='การลงทะเบียน', template=buttons_template)
     line_bot_api.reply_message(event.reply_token, template_message)
-    #endcopy
+    # endcopy
 
 
-@handler.add(UnfollowEvent)  #โดน block
+@handler.add(UnfollowEvent)  # โดน block
 def handle_unfollow(event):
     app.logger.info("Got Unfollow event")
     print(event.source.user_id + " Un followed.")
@@ -287,7 +392,6 @@ def handle_leave():
     app.logger.info("Got leave event")
 
 
-
 @handler.add(BeaconEvent)
 def handle_beacon(event):
     line_bot_api.reply_message(
@@ -303,7 +407,6 @@ def send_static_content(path):
 
 
 if __name__ == "__main__":
-
     app.jinja_env.auto_reload = True
     app.config['TEMPLATES_AUTO_RELOAD'] = True
 
