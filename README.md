@@ -1,4 +1,4 @@
-# Flask KitchenSink
+# UTEHN
 
 Sample bot using [Flask](http://flask.pocoo.org/)
 
