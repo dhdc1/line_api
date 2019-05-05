@@ -104,6 +104,9 @@ def regis():
         line_id = request.form['line_id']
         print(cid, byear, line_id)
 
+        sql = "insert into line (cid,line_id,d_update) values ( '{0}' , '{1}' ,CURRENT_DATE()) "
+
+
         return render_template('ok.html')
 
 
