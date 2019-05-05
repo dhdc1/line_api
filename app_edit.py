@@ -154,65 +154,187 @@ def regis():
 @app.route("/push", methods=["GET"])
 def push():
     line_message_push(['Ude27617017e3cbf820dd9aa13b1491ca'], [
+
         {
             "type": "flex",
-            "altText": "flex push flex push",
+            "altText": "Flex Message",
             "contents": {
-                "type": "bubble",
-                "styles": {
-                    "header": {
-                        "backgroundColor": "#ffaaaa"
+                "type": "carousel",
+                "contents": [
+                    {
+                        "type": "bubble",
+                        "hero": {
+                            "type": "image",
+                            "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_5_carousel.png",
+                            "size": "full",
+                            "aspectRatio": "20:13",
+                            "aspectMode": "cover"
+                        },
+                        "body": {
+                            "type": "box",
+                            "layout": "vertical",
+                            "spacing": "sm",
+                            "contents": [
+                                {
+                                    "type": "text",
+                                    "text": "Arm Chair, White",
+                                    "size": "xl",
+                                    "weight": "bold",
+                                    "wrap": True
+                                },
+                                {
+                                    "type": "box",
+                                    "layout": "baseline",
+                                    "contents": [
+                                        {
+                                            "type": "text",
+                                            "text": "$49",
+                                            "flex": 0,
+                                            "size": "xl",
+                                            "weight": "bold",
+                                            "wrap": True
+                                        },
+                                        {
+                                            "type": "text",
+                                            "text": ".99",
+                                            "flex": 0,
+                                            "size": "sm",
+                                            "weight": "bold",
+                                            "wrap": True
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        "footer": {
+                            "type": "box",
+                            "layout": "vertical",
+                            "spacing": "sm",
+                            "contents": [
+                                {
+                                    "type": "button",
+                                    "action": {
+                                        "type": "uri",
+                                        "label": "Add to Cart",
+                                        "uri": "https://linecorp.com"
+                                    },
+                                    "style": "primary"
+                                },
+                                {
+                                    "type": "button",
+                                    "action": {
+                                        "type": "uri",
+                                        "label": "Add to whishlist",
+                                        "uri": "https://linecorp.com"
+                                    }
+                                }
+                            ]
+                        }
                     },
-                    "body": {
-                        "backgroundColor": "#aaffaa"
+                    {
+                        "type": "bubble",
+                        "hero": {
+                            "type": "image",
+                            "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_6_carousel.png",
+                            "size": "full",
+                            "aspectRatio": "20:13",
+                            "aspectMode": "cover"
+                        },
+                        "body": {
+                            "type": "box",
+                            "layout": "vertical",
+                            "spacing": "sm",
+                            "contents": [
+                                {
+                                    "type": "text",
+                                    "text": "Metal Desk Lamp",
+                                    "size": "xl",
+                                    "weight": "bold",
+                                    "wrap": True
+                                },
+                                {
+                                    "type": "box",
+                                    "layout": "baseline",
+                                    "flex": 1,
+                                    "contents": [
+                                        {
+                                            "type": "text",
+                                            "text": "$11",
+                                            "flex": 0,
+                                            "size": "xl",
+                                            "weight": "bold",
+                                            "wrap": True
+                                        },
+                                        {
+                                            "type": "text",
+                                            "text": ".99",
+                                            "flex": 0,
+                                            "size": "sm",
+                                            "weight": "bold",
+                                            "wrap": True
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "text",
+                                    "text": "Temporarily out of stock",
+                                    "flex": 0,
+                                    "margin": "md",
+                                    "size": "xxs",
+                                    "color": "#FF5551",
+                                    "wrap": True
+                                }
+                            ]
+                        },
+                        "footer": {
+                            "type": "box",
+                            "layout": "vertical",
+                            "spacing": "sm",
+                            "contents": [
+                                {
+                                    "type": "button",
+                                    "action": {
+                                        "type": "uri",
+                                        "label": "Add to Cart",
+                                        "uri": "https://linecorp.com"
+                                    },
+                                    "flex": 2,
+                                    "color": "#AAAAAA",
+                                    "style": "primary"
+                                },
+                                {
+                                    "type": "button",
+                                    "action": {
+                                        "type": "uri",
+                                        "label": "Add to wish list",
+                                        "uri": "https://linecorp.com"
+                                    }
+                                }
+                            ]
+                        }
                     },
-                    "footer": {
-                        "backgroundColor": "#aaaaff"
+                    {
+                        "type": "bubble",
+                        "direction": "ltr",
+                        "body": {
+                            "type": "box",
+                            "layout": "vertical",
+                            "spacing": "sm",
+                            "contents": [
+                                {
+                                    "type": "button",
+                                    "action": {
+                                        "type": "uri",
+                                        "label": "See more",
+                                        "uri": "https://linecorp.com"
+                                    },
+                                    "flex": 1,
+                                    "gravity": "center"
+                                }
+                            ]
+                        }
                     }
-                },
-                "header": {
-                    "type": "box",
-                    "layout": "vertical",
-                    "contents": [
-                        {
-                            "type": "text",
-                            "text": "หมายเลข A0021",
-                            "weight": "bold",
-                            "size": "lg",
-                            "align": "center",
-
-                        }
-                    ]
-                },
-                "hero": {
-                    "type": "image",
-                    "url": "https://barcode.tec-it.com/barcode.ashx?data=A0021&code=MobileQRCode&multiplebarcodes=false&translate-esc=false&unit=Fit&dpi=96&imagetype=Gif&rotation=0&color=%23000000&bgcolor=%23ffffff&qunit=Mm&quiet=0&eclevel=L",
-                    "size": "full",
-                    "aspectRatio": "2:1"
-                },
-                "body": {
-                    "type": "box",
-                    "layout": "vertical",
-                    "contents": [
-                        {
-                            "type": "text",
-                            "text": "เหลืออีก 10 คิวจะถึงคิวของท่าน เวลาโดยประมาณ 50 นาที",
-                            "wrap": True
-                        }
-                    ]
-                },
-                "footer": {
-                    "type": "box",
-                    "layout": "vertical",
-                    "contents": [
-                        {
-                            "type": "text",
-                            "text": "Smart Queue Solution",
-                            "align": "center",
-                            "size": "sm"
-                        }
-                    ]
-                }
+                ]
             }
         }
 
