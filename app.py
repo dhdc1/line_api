@@ -92,6 +92,19 @@ def con_db():
     )
     return db
 
+def is_member(event):
+    line_id = event.source.user_id
+    sql = "select count(cid) from line where line_id = '{0}' ".format(line_id)
+    db = con_db()
+    cursor = db.cursor()
+    cursor.execute(sql)
+    row = cursor.fetchone()
+    if row[0] > 0:
+        return True
+    else:
+        return False
+
+
 #web request
 @app.route("/regis", methods=['POST', 'GET'])
 def regis():
@@ -112,9 +125,6 @@ def regis():
         db.commit()
 
         return render_template('ok.html')
-
-
-
 
 
 @app.route("/ok", methods=['GET'])
