@@ -110,13 +110,12 @@ def line_message_reply(event, messages):
 
 
 def is_member(event):
-    line_id = event.source.user_id
-    sql = "select count(cid) from line where line_id ='{0}'".format(line_id)
+    user_id = event.source.user_id
+    sql = "select count(cid) from line where line_id ='{0}'".format(user_id)
     db = con_db()
     cursor = db.cursor()
     cursor.execute(sql)
     row = cursor.fetchone()
-
     if row[0] > 0:
         return True
     else:
@@ -284,6 +283,71 @@ def handle_text_message(event):
                 "type": "sticker",
                 "packageId": "1",
                 "stickerId": "100"
+            }
+        ])
+
+    if text == 'คิว':
+        line_message_reply(event, [
+            {
+                "type": "flex",
+                "altText": "this is a flex message",
+                "contents": {
+                    "type": "bubble",
+                    "styles": {
+                        "header": {
+                            "backgroundColor": "#ffaaaa"
+                        },
+                        "body": {
+                            "backgroundColor": "#aaffaa"
+                        },
+                        "footer": {
+                            "backgroundColor": "#aaaaff"
+                        }
+                    },
+                    "header": {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "text",
+                                "text": "หมายเลข A0021",
+                                "weight": "bold",
+                                "size": "lg",
+                                "align": "center",
+
+                            }
+                        ]
+                    },
+                    "hero": {
+                        "type": "image",
+                        "url": "https://barcode.tec-it.com/barcode.ashx?data=A0021&code=MobileQRCode&multiplebarcodes=false&translate-esc=false&unit=Fit&dpi=96&imagetype=Gif&rotation=0&color=%23000000&bgcolor=%23ffffff&qunit=Mm&quiet=0&eclevel=L",
+                        "size": "full",
+                        "aspectRatio": "2:1"
+                    },
+                    "body": {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "text",
+                                "text": "เหลืออีก 10 คิวจะถึงคิวของท่าน เวลาโดยประมาณ 50 นาที",
+                                "wrap": True
+                            }
+                        ]
+                    },
+                    "footer": {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "text",
+                                "text": "Smart Queue Solution",
+                                "align": "center",
+                                "size": "sm"
+                            }
+                        ]
+                    }
+                }
             }
         ])
 
